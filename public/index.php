@@ -1,6 +1,5 @@
 <?php
-
-echo "hello world";
+session_start();
 
 function show($url) {
     echo '<pre>';
@@ -8,10 +7,6 @@ function show($url) {
     echo '</pre>';
 }
 
-/**
- * Split the URL into an array
- * @return array
- */
 function splitUrl() {
     // Get the URL from the query string or default to home
     $url = $_GET['url'] ?? 'home';
@@ -19,13 +14,17 @@ function splitUrl() {
     return $url;
 }
 
-show(splitUrl());
+//show(splitUrl());
 
-// // Get the controller and method from the URL
-// $controller = $url[0] ?? 'home';
-// $method = $url[1] ?? 'index';
+function loadController() {
+    $url = splitUrl();
 
-// // Get the parameters from the URL
-// $params = array_slice($url, 2);
+    $controllerFileName = '../app/controllers/' . ucfirst($url[0]) . '.php';
+    if (file_exists($controllerFileName)) {
+    } else {
+        $controllerFileName = '../app/controllers/_404.php';
+    }
+    require_once $controllerFileName;
+}
 
-?>
+loadController();
