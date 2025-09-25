@@ -1,1 +1,5 @@
-Products Controller
+<?php
+
+namespace App\Controllers;
+
+echo 'Products Controller';
