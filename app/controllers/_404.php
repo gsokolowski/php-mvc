@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Controllers;
+use App\Core\Controller;
 
-class _404 {
+class _404 extends Controller
+{
+    
     public function index() {
         echo "404 error - controller not found";
     }
 }
-$page404 = new _404();
-$page404->index();
+// call this class from App.php

@@ -2,7 +2,13 @@
 
 namespace App\Core;
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 class App {
+
+    private $controllerName = 'Home';
+    private $methodName = 'index';
 
     private function splitUrl() {
         // Get the URL from the query string or default to home
@@ -12,14 +18,26 @@ class App {
     }
 
     public function loadController() {
+
         $url = $this->splitUrl();
 
-        $controllerFileName = '../app/controllers/' . ucfirst($url[0]) . '.php';
-        if (file_exists($controllerFileName)) {
+        $this->controllerName = ucfirst($url[0]);
+        $controllerPath = '../app/controllers/' . $this->controllerName . '.php';
+        
+        if (file_exists($controllerPath)) {
         } else {
-            $controllerFileName = '../app/controllers/_404.php';
+            $controllerPath = '../app/controllers/_404.php';
+            $this->controllerName = '_404';
         }
-        require_once $controllerFileName;
+        require_once $controllerPath;
+
+        //show($this->controllerName); //Home Products _404
+
+        $this->controllerName = '\\App\\Controllers\\' . $this->controllerName;
+        $controller = new $this->controllerName(); //Home Products _404
+        
+        // calls controller and the method
+        call_user_func_array([$controller, $this->methodName], []);
     }
 
 }

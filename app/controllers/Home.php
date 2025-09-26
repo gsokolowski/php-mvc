@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Controllers;
+use App\Core\Controller;
 
-class Home {
+class Home extends Controller
+{
     
     public function index() {
-        echo "home controller loaded and method index called";
+        echo "home controller loaded and method index called --";
     }
 }
-
-$home = new Home();
-$home->index(); 
+// call this class from App.php
