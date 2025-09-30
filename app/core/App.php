@@ -36,7 +36,7 @@ class App {
         $this->controllerName = '\\App\\Controllers\\' . $this->controllerName;
         $controller = new $this->controllerName(); //Home Products _404
         
-        // calls controller and the method
+        // calls controller and the method and an araay of parameters for controller method
         call_user_func_array([$controller, $this->methodName], []);
     }
 
