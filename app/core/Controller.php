@@ -10,7 +10,6 @@ class Controller
     public function view($name) {
 
         $fileName = '../app/views/' . $name . '.view.php';
-        var_dump($fileName);
         
         if (file_exists($fileName)) {
         } else {
