@@ -4,46 +4,41 @@ namespace App\Core;
 
 trait Database {
 
-    private $dbh;
-    private $stmt;
+    private $con;
+    private $stm;
 
     // connect to the database
     public function connect() {
-        $this->dbh = new \PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-        echo "Database connection successful";
+        $this->con = new \PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
+        //echo "Database connection successful";
+    }
+    
+    // execute sql query and return data as object
+    public function query($query, $data = []) {
+
+        $this->connect();
+        $this->stm = $this->con->prepare($query);
+        
+        $check = $this->stm->execute();
+        if($check) {
+            $result = $this->stm->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
+            return  $result;
+        }
+        return false;
     }
 
-    // prepare the query
-    public function query($query, $params = []) {
-        $this->stmt = $this->dbh->prepare($query);
-        return $this;
-    }
+    // execute sql query and return only one row of data as object
+    public function getRow($query, $data = []) {
 
-    // execute the query
-    public function execute() {
-        return $this->stmt->execute();
-    }
-
-    // fetch all the data from the database
-    public function fetchAll() {
-        $this->execute();
-        return $this->stmt->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
-    }
-
-    // fetch a single row from the database
-    public function single() {
-        $this->execute();
-        return $this->stmt->fetch(\PDO::FETCH_OBJ); // return a single row from the database as an object
-    }
-
-    // count the number of rows in the database
-    public function rowCount() {
-        return $this->stmt->rowCount();
-    }
-
-    // get the last inserted id from the database
-    public function lastInsertId() {
-        return $this->dbh->lastInsertId();
+        $this->connect();
+        $this->stm = $this->con->prepare($query);
+        
+        $check = $this->stm->execute();
+        if($check) {
+            $result = $this->stm->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
+            return  $result[0];
+        }
+        return false;
     }
 
 }

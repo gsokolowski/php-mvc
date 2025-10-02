@@ -14,7 +14,7 @@ class DatabaseAsClass {
     }
 
     // prepare the query
-    public function query($query, $params = []) {
+    public function query($query, $data = []) {
         $this->stmt = $this->dbh->prepare($query);
         return $this;
     }
@@ -26,14 +26,26 @@ class DatabaseAsClass {
 
     // fetch all the data from the database
     public function fetchAll() {
-        $this->execute();
-        return $this->stmt->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
+        $check = $this->execute();
+        
+        if($check) {
+            $result = $this->stmt->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
+        } else {
+            $result = 'Query failed';
+        }
+        return  $result; 
     }
 
     // fetch a single row from the database
     public function single() {
-        $this->execute();
-        return $this->stmt->fetch(\PDO::FETCH_OBJ); // return a single row from the database as an object
+        $check = $this->execute();
+
+        if($check) {
+            $result = $this->stmt->fetch(\PDO::FETCH_OBJ); // return a single row from the database as an object
+        } else {
+            $result = 'Query failed';
+        }
+        return  $result; 
     }
 
     // count the number of rows in the database
@@ -53,13 +65,8 @@ class DatabaseAsClass {
 // $query = "SELECT * FROM users";
 // $db->query( $query, [] );
 // $check = $db->execute();
-
-// if($check) {
-//     $result = $db->fetchAll();
-//     show($result);
-// } else {
-//     echo 'Query failed';
-// }
+// $result = $db->fetchAll();
+// show($result);
 
 
 

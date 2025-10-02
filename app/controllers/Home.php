@@ -10,6 +10,7 @@ class Home extends Controller
     
     public function index() {
 
+
         $model = new Model();
         $result = $model->test();
         show($result);
