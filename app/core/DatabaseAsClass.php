@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-trait Database {
+class DatabaseAsClass {
 
     private $dbh;
     private $stmt;
@@ -47,4 +47,21 @@ trait Database {
     }
 
 }
+
+// $db = new Database();
+// $db->connect();
+// $query = "SELECT * FROM users";
+// $db->query( $query, [] );
+// $check = $db->execute();
+
+// if($check) {
+//     $result = $db->fetchAll();
+//     show($result);
+// } else {
+//     echo 'Query failed';
+// }
+
+
+
+
 

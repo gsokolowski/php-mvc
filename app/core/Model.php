@@ -2,7 +2,8 @@
 
 namespace App\Core;
 
-class Model extends Database {
+class Model {
+    use Database; //trait Database is loaded
 
     public function test() {
         $this->connect();
