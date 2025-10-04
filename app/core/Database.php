@@ -14,7 +14,7 @@ trait Database {
     }
 
     // execute sql query and return data as object
-    public function query($sql, $data = []) {
+    public function executeQuery($sql, $data = []) {
 
         $this->connect();
         $this->stm = $this->con->prepare($sql);

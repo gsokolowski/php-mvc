@@ -20,7 +20,7 @@ class Home extends Controller
         // show($result);
 
         // testing insert() model function
-        // $data['name'] = 'Sonia';
+        // $data['name'] = 'Roma';
         // $data['age'] = '30';
         // $data['date'] = date('Y-m-d');
         // $result = $model->insert($data);
@@ -33,7 +33,7 @@ class Home extends Controller
         show($result);
 
         // testing delete
-        // $result = $model->delete(5);
+        // $result = $model->delete(6);
         // show($result);
 
 
