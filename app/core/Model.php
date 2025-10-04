@@ -15,8 +15,9 @@ class Model {
         return $result;
     }
 
-    // returns multiple rows with where clause 
-    public function where($data, $dataNot = []) {
+    private function buildSql($data, $dataNot) {
+
+        //$sql = "select * from users where id = :id && id != :id limit 10 offset 0";
 
         $keys = array_keys($data);
         $keysNot = array_keys($dataNot);
@@ -34,40 +35,33 @@ class Model {
         $sqlBuilder = trim($sqlBuilder, " &&");
         $sqlBuilder .= " limit $this->limit offset $this->offset";
 
-        $data = array_merge($data, $dataNot);
+        return $sqlBuilder;
+    }
 
-        //$sql = "select * from users where id = :id && id != :id limit 10 offset 0";
+    // returns multiple rows with where clause 
+    public function where($data, $dataNot = []) {
+
+        $sqlBuilder = $this->buildSql($data, $dataNot);
+
         // show($sql);
         // show($data);
         // show($dataNot);
 
-        return $this->query($sqlBuilder, $data);        
+        $data = array_merge($data, $dataNot);
+
+        $result = $this->query($sqlBuilder, $data);
+        if($result) {
+            return $result;
+        }
+        return false;
+
     }
     // returns only one row
     public function first($data, $dataNot = []) {
 
-        $keys = array_keys($data);
-        $keysNot = array_keys($dataNot);
-
-        $sqlBuilder = "select * from $this->table where ";
-
-        foreach ($keys as $key) {
-            $sqlBuilder .= $key . " = :". $key . " && ";
-        }
-
-        foreach ($keysNot as $key) {
-            $sqlBuilder .= $key . " != :". $key . " && ";
-        }
-
-        $sqlBuilder = trim($sqlBuilder, " &&");
-        $sqlBuilder .= " limit $this->limit offset $this->offset";
+        $sqlBuilder = $this->buildSql($data, $dataNot);
 
         $data = array_merge($data, $dataNot);
-
-        //$sql = "select * from users where id = :id && id != :id limit 10 offset 0";
-        // show($sql);
-        // show($data);
-        // show($dataNot);
 
         $result = $this->query($sqlBuilder, $data); 
         if($result) {
