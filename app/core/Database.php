@@ -12,14 +12,14 @@ trait Database {
         $this->con = new \PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
         //echo "Database connection successful";
     }
-    
+
     // execute sql query and return data as object
-    public function query($query, $data = []) {
+    public function query($sql, $data = []) {
 
         $this->connect();
-        $this->stm = $this->con->prepare($query);
-        
-        $check = $this->stm->execute();
+        $this->stm = $this->con->prepare($sql);
+        show($this->stm);
+        $check = $this->stm->execute($data); // passs data for sql placeholders
         if($check) {
             $result = $this->stm->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
             return  $result;
@@ -28,12 +28,12 @@ trait Database {
     }
 
     // execute sql query and return only one row of data as object
-    public function getRow($query, $data = []) {
+    public function getRow($sql, $data = []) {
 
         $this->connect();
-        $this->stm = $this->con->prepare($query);
+        $this->stm = $this->con->prepare($sql);
         
-        $check = $this->stm->execute();
+        $check = $this->stm->execute($data);
         if($check) {
             $result = $this->stm->fetchAll(\PDO::FETCH_OBJ); // return all the data from the database as an object
             return  $result[0];
