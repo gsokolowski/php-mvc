@@ -12,7 +12,13 @@ class Home extends Controller
 
 
         $model = new Model();
-        $result = $model->test();
+        $data['id'] = 1;
+        $dataNot['name'] = 'Dominika';
+
+        //$data['name'] = 'Dominika';
+
+        $result = $model->where($data,$dataNot);
+        echo 'show result';
         show($result);
 
         echo "home controller loaded and method index called --";
