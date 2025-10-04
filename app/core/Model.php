@@ -11,7 +11,7 @@ class Model {
 
     public function test() {
         $sql = "SELECT * FROM users";
-        $result = $this->query($sql , [] );
+        $result = $this->executeQuery($sql , [] );
         return $result;
     }
 
@@ -22,34 +22,30 @@ class Model {
         $keys = array_keys($data);
         $keysNot = array_keys($dataNot);
 
-        $sqlBuilder = "select * from $this->table where ";
+        $sql = "select * from $this->table where ";
 
         foreach ($keys as $key) {
-            $sqlBuilder .= $key . " = :". $key . " && ";
+            $sql .= $key . " = :". $key . " && ";
         }
 
         foreach ($keysNot as $key) {
-            $sqlBuilder .= $key . " != :". $key . " && ";
+            $sql .= $key . " != :". $key . " && ";
         }
 
-        $sqlBuilder = trim($sqlBuilder, " &&");
-        $sqlBuilder .= " limit $this->limit offset $this->offset";
+        $sql = trim($sql, " &&");
+        $sql .= " limit $this->limit offset $this->offset";
 
-        return $sqlBuilder;
+        return $sql;
     }
 
     // returns multiple rows with where clause 
     public function where($data, $dataNot = []) {
 
-        $sqlBuilder = $this->buildSql($data, $dataNot);
-
-        // show($sql);
-        // show($data);
-        // show($dataNot);
-
+        $sql = $this->buildSql($data, $dataNot);
+        show($sql);
         $data = array_merge($data, $dataNot);
+        $result = $this->executeQuery($sql, $data);
 
-        $result = $this->query($sqlBuilder, $data);
         if($result) {
             return $result;
         }
@@ -59,11 +55,11 @@ class Model {
     // returns only one row
     public function first($data, $dataNot = []) {
 
-        $sqlBuilder = $this->buildSql($data, $dataNot);
-
+        $sql = $this->buildSql($data, $dataNot);
+        show($sql);
         $data = array_merge($data, $dataNot);
 
-        $result = $this->query($sqlBuilder, $data); 
+        $result = $this->executeQuery($sql, $data); 
         if($result) {
             return $result[0];
         }
@@ -71,17 +67,47 @@ class Model {
     }
     // inserts data to db table
     public function insert($data) {
+
+        $keys = array_keys($data);
+        echo implode(',:',$keys);
+        $sql = "insert into $this->table (". implode(',',$keys) .") values (:". implode(',:',$keys) .") ";
+        show($sql);
+
+        $this->executeQuery($sql, $data); 
+        $result = $this->lastInsertId();
+        return $result;
         
     }
     // updates record by id
     public function update($id, $data) {
-        
+
+        $keys = array_keys($data);
+        //$sql = "update $this->table set name =:name, age =:age where id = $id";
+        $sql = "update $this->table set ";
+
+        foreach ($keys as $key) {
+            $sql .= $key . " = :". $key . " , ";
+        }
+
+        $sql = trim($sql, " ,");
+        $sql .= " where id = :id";
+
+        // echo $sql;
+        $data['id'] = $id; // add id value into data
+        // show($data);
+
+        $this->executeQuery($sql, $data); 
+        return false;
     }
     // deltetes record by id
     public function delete($id) {
-        
-    }
 
+        $data['id'] = $id;
+        $sql = "delete from  $this->table where id = :id";
+        
+        $this->executeQuery($sql, $data); 
+        return false;
+    }
 }
 
 // $model = new Model();
