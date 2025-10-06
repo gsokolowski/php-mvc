@@ -2,18 +2,17 @@
 
 namespace App\Core;
 
-class Model {
+trait Model {
 
     use Database; //trait Database is loaded
-    protected $table = 'users';
-    protected $limit = 10;
-    protected $offset = 0;
 
-    public function test() {
-        $sql = "SELECT * FROM users";
-        $result = $this->executeQuery($sql , [] );
-        return $result;
-    }
+    // Now this properties are defined in specific model like models/User.php
+    // protected $table = 'users';
+    // protected $limit = 10;
+    // protected $offset = 0;
+    // protected $order_type = 'desc';
+    // protected $orderColumn = 'id';
+    // protected $allowCollumns = [];
 
     private function buildSql($data, $dataNot) {
 
@@ -33,9 +32,36 @@ class Model {
         }
 
         $sql = trim($sql, " &&");
-        $sql .= " limit $this->limit offset $this->offset";
+        $sql .= " order by $this->orderColumn $this->orderType limit $this->limit offset $this->offset";
 
         return $sql;
+    }
+
+    private function trimDatatoAllowCollumns($data) {
+        // // delete column from daata which is not part of allowed collumns
+        if(!empty($this->allowCollumns)){
+            foreach ($data as $key => $value) {
+                if(!in_array($key, $this->allowCollumns)){
+                    unset($data[$key]); // delete column from daata array
+                }
+            }
+        }
+        return $data;
+    }
+
+
+    // returns multiple rows with where clause 
+    public function findAll() {
+
+        $sql = "select * from  $this->table order by $this->orderColumn $this->orderType limit $this->limit offset $this->offset";
+        show($sql);
+        $result = $this->executeQuery($sql);
+
+        if($result) {
+            return $result;
+        }
+        return false;
+
     }
 
     // returns multiple rows with where clause 
@@ -68,8 +94,10 @@ class Model {
     // inserts data to db table
     public function insert($data) {
 
+        $data = $this->trimDatatoAllowCollumns($data);
+
         $keys = array_keys($data);
-        echo implode(',:',$keys);
+        //echo implode(',:',$keys);
         $sql = "insert into $this->table (". implode(',',$keys) .") values (:". implode(',:',$keys) .") ";
         show($sql);
 
@@ -80,6 +108,8 @@ class Model {
     }
     // updates record by id
     public function update($id, $data) {
+
+        $data = $this->trimDatatoAllowCollumns($data);
 
         $keys = array_keys($data);
         //$sql = "update $this->table set name =:name, age =:age where id = $id";
@@ -92,7 +122,7 @@ class Model {
         $sql = trim($sql, " ,");
         $sql .= " where id = :id";
 
-        // echo $sql;
+        echo $sql;
         $data['id'] = $id; // add id value into data
         // show($data);
 
@@ -104,7 +134,7 @@ class Model {
 
         $data['id'] = $id;
         $sql = "delete from  $this->table where id = :id";
-        
+
         $this->executeQuery($sql, $data); 
         return false;
     }

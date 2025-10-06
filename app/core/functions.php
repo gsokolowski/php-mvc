@@ -7,3 +7,8 @@ function show($url) {
     print_r($url);
     echo '</pre>';
 }
+
+// to escape some js code which could be passed through form to insert or update method
+function escape($str) {
+    return htmlspecialchars($str);
+}
