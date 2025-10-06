@@ -3,15 +3,18 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
-use App\Core\Model;
+use App\Models\User;
 
 class Home extends Controller
 {
     
     public function index() {
 
+        $model = new User;
 
-        $model = new Model();
+        // find all from table
+        $result = $model->findAll();
+        show($result);
 
         // testing where() model function
         // $data['id'] = 1;
@@ -19,21 +22,27 @@ class Home extends Controller
         // $result = $model->where($data,$dataNot);
         // show($result);
 
+        // testing first() model function
+        // $data['id'] = 1;
+        // $dataNot['name'] = 'Dominika';
+        // $result = $model->first($data,$dataNot);
+        // show($result);
+
         // testing insert() model function
-        // $data['name'] = 'Roma';
-        // $data['age'] = '30';
+        // $data['name'] = 'Simone';
+        // $data['age'] = '18';
         // $data['date'] = date('Y-m-d');
         // $result = $model->insert($data);
         // show($result);
 
         // testing update() model function
-        $data['name'] = 'Mariane';
-        $data['age'] = '53';
-        $result = $model->update(3,$data);
-        show($result);
+        // $data['name'] = 'Mariane';
+        // $data['age'] = '111';
+        // $result = $model->update(3,$data);
+        // show($result);
 
         // testing delete
-        // $result = $model->delete(6);
+        // $result = $model->delete(15);
         // show($result);
 
 
