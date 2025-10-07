@@ -7,13 +7,21 @@ ini_set('display_errors', 1);
 
 class App {
 
-    private $controllerName = 'Home';
-    private $methodName = 'index';
+
+    /** 
+     * this is example of url that it will be used in the project $url = http://localhost/garbage/php-mvc/public/home/edit/1
+     * home/edit/17 $url[0]/$url[1]/$url[2]
+     * so you tell mvc which controller to run - home
+     * so you tell mcv which method on this controller to run - edit
+     * so you say which record id to update - 17
+    **/
+    private $controllerName = 'Home'; // default controllerName called controller class
+    private $methodName = 'index'; // default $methodName called on controller class
 
     private function splitUrl() {
         // Get the URL from the query string or default to home
         $url = $_GET['url'] ?? 'home';
-        $url = explode('/', $url);
+        $url = explode('/', trim($url, "/"));
         return $url;
     }
 
@@ -21,9 +29,10 @@ class App {
 
         $url = $this->splitUrl();
 
+        // Select controller as first parameter of the $url array
         $this->controllerName = ucfirst($url[0]);
         $controllerPath = '../app/controllers/' . $this->controllerName . '.php';
-        
+
         if (file_exists($controllerPath)) {
         } else {
             $controllerPath = '../app/controllers/_404.php';
@@ -31,13 +40,18 @@ class App {
         }
         require_once $controllerPath;
 
-        //show($this->controllerName); //Home Products _404
-
         $this->controllerName = '\\App\\Controllers\\' . $this->controllerName;
-        $controller = new $this->controllerName(); //Home Products _404
-        
-        // calls controller and the method and an araay of parameters for controller method
-        call_user_func_array([$controller, $this->methodName], []);
+        $controller = new $this->controllerName(); //call Controller class Index Home Products _404
+
+
+        // Select method of the controller method on a second parameter of the $url array
+        if(!empty($url[1])) {
+            if(method_exists($controller, $url[1])){ // if that method exists for this particular class
+                $this->methodName = $url[1];
+            }
+        }
+        // calls controller and the method and an aray of parameters for controller method
+        call_user_func_array([$controller, $this->methodName], $url); 
     }
 
 }

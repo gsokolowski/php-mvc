@@ -10,8 +10,13 @@ class Home extends Controller
     
     public function index($a = '', $b = '', $c ='') {
 
-        show($a);
+        echo 'Method index was called';
         
+        show($a);
+        show($b);
+        show($c);
+
+        die();
         $model = new User;
 
         // find all from table
@@ -50,6 +55,16 @@ class Home extends Controller
 
         echo "home controller loaded and method index called --";
         $this->view('Home');
+    }
+
+    public function edit($a = '', $b = '', $c ='') {
+        echo 'Method edit was called';
+
+        show($a);
+        show($b);
+        show($c);
+        $model = new User;
+
     }
 }
 // call this class from App.php
