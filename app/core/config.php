@@ -21,3 +21,9 @@ if($_SERVER['SERVER_NAME'] == 'localhost') {
 
     define('ROOT', 'https://www.yourdomain.com/public'); 
 }
+
+define('APP_NAME', 'My Website');
+define('APP_DESC', 'Description of the website');
+
+define('DEBUG', true);
+
