@@ -8,8 +8,10 @@ use App\Models\User;
 class Home extends Controller
 {
     
-    public function index() {
+    public function index($a = '', $b = '', $c ='') {
 
+        show($a);
+        
         $model = new User;
 
         // find all from table

@@ -5,7 +5,6 @@ spl_autoload_register(function($classPath){
     $parts = explode("\\", $classPath); // Split the string by backslash
     $className = end($parts); // Get the last element
     $filePath = "../app/models/".ucfirst($className).".php";
-    // echo $filePath;
     require_once $filePath;
 });
 require_once 'config.php';
