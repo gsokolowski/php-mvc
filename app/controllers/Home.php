@@ -16,7 +16,6 @@ class Home extends Controller
         show($b);
         show($c);
 
-        die();
         $model = new User;
 
         // find all from table

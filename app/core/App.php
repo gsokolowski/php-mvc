@@ -30,15 +30,20 @@ class App {
         $url = $this->splitUrl();
 
         // Select controller as first parameter of the $url array
-        $this->controllerName = ucfirst($url[0]);
         $controllerPath = '../app/controllers/' . $this->controllerName . '.php';
 
         if (file_exists($controllerPath)) {
+
+            require_once $controllerPath;
+            $this->controllerName = ucfirst($url[0]);
+            unset($url[0]); // remove it from $ure array so you have only parrams passed further
         } else {
+
             $controllerPath = '../app/controllers/_404.php';
             $this->controllerName = '_404';
+            require_once $controllerPath;
         }
-        require_once $controllerPath;
+        
 
         $this->controllerName = '\\App\\Controllers\\' . $this->controllerName;
         $controller = new $this->controllerName(); //call Controller class Index Home Products _404
@@ -48,6 +53,7 @@ class App {
         if(!empty($url[1])) {
             if(method_exists($controller, $url[1])){ // if that method exists for this particular class
                 $this->methodName = $url[1];
+                unset($url[1]); // remove it from $ure array so you have only parrams passed further
             }
         }
         // calls controller and the method and an aray of parameters for controller method
