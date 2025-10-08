@@ -29,6 +29,7 @@ class App {
 
         $url = $this->splitUrl();
 
+        $this->controllerName = ucfirst($url[0]);
         // Select controller as first parameter of the $url array
         $controllerPath = '../app/controllers/' . $this->controllerName . '.php';
 
