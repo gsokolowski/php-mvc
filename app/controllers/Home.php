@@ -57,12 +57,8 @@ class Home extends Controller
     }
 
     public function edit($a = '', $b = '', $c ='') {
+        
         echo 'Method edit was called';
-
-        show($a);
-        show($b);
-        show($c);
-        $model = new User;
 
     }
 }
