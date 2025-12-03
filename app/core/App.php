@@ -9,7 +9,7 @@ class App {
 
 
     /** 
-     * this is example of url that it will be used in the project $url = http://localhost/garbage/php-mvc/public/home/edit/1
+     * this is example of url that it will be used in the project $url = http://localhost/tools/php-mvc/public/home/edit/1
      * home/edit/17 $url[0]/$url[1]/$url[2]
      * so you tell mvc which controller to run - home
      * so you tell mcv which method on this controller to run - edit
